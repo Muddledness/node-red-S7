@@ -22,7 +22,7 @@ socket.onmessage = function(event) {
     }
     return database;
 };
-
+// 更新前端表格
 function updateTable(data) {
     table.innerHTML = '';
     const headerRow = table.insertRow();
@@ -47,7 +47,7 @@ function updateTable(data) {
         deleteCell.appendChild(deleteButton);
     });
 };
-
+// 删除订单
 function deleteRow(id) {
     socket.send(JSON.stringify({ action: 'delete', id: id }));
     const deletedIndex = database.findIndex(item => item.id === id);
