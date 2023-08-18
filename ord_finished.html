@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产计划</title>
+    <link rel="stylesheet" href="styles_magem.css">
+</head>
+<body>
+    <div id="sidebar">
+        <h2>管理系统</h2>
+        <a class="nav-link" href="order.html">生产计划</a>
+        <a class="nav-link" href="monitor.html">设备监控</a>
+        <a class="nav-link" href="operate.html">设备调试</a>
+        <a class="nav-link" href="ord_management.html">订单管理</a>
+    </div>
+    <div id="content">
+        <h2>历史订单</h2>
+        <table id="data-table">
+            <tr>
+                <th>产品ID</th>
+                <th>产品种类</th>
+                <th>产品数量</th>
+                <th>完成时间</th>
+                <th>操作</th>
+            </tr>
+        </table>
+
+        <button onclick="sele_ord()">查看当前订单</button>
+        
+    </div>
+    <script src="script_history.js"></script>
+    <script>
+        function sele_ord(){
+            window.location.href = './ord_management.html'
+        }
+    </script>
+
+</body>
+</html>

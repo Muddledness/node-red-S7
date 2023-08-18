@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生产计划</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        
+        #sidebar {
+            width: 200px;
+            height: 700px;
+            background-color: #333;
+            color: white;
+            padding-top: 20px;
+        }
+        
+        #sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        #content {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 20px;
+            color: white;
+            text-decoration: none;
+            background-color: #333; /* 设置背景色与导航栏一致 */
+        }
+        
+        .nav-link:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h2>管理系统</h2>
+        <a class="nav-link" href="order.html">生产计划</a>
+        <a class="nav-link" href="monitor.html">设备监控</a>
+        <a class="nav-link" href="operate.html">设备调试</a>
+        <a class="nav-link" href="ord_management.html">订单管理</a>
+
+    </div>
+    <div id="content">
+        <h2>生产计划</h2>
+        <!-- <p id="time_get">当前时间：NaN</p> -->
+        <!-- <time>2022-12-17</time> -->
+        <label for="productType">选择产品类型:</label>
+        <select id="productType">
+            <option value="W101">W101</option>
+            <option value="W102">W102</option>
+            <option value="W103">W103</option>
+            <option value="W104">W104</option>
+        </select>
+        <br><br>
+        <label for="productPriority">选择产品优先级:</label>
+        <input type="number" id="productPriority" min="1" value="1">
+        <br><br>
+        <label for="productQuantity">生产数量：</label>
+        <input type="number" id="productQuantity" min="1" value="1">
+        <br><br>
+        <button onclick="submitSelection()">提交</button>
+    </div>
+
+    <script>
+        var socket = new WebSocket("ws://localhost:1880/ws/order");
+
+        socket.onopen = function(event) { 
+            console.log("WebSocket connected");
+        };
+        
+        
+
+        function submitSelection() {
+            var selectedProductType = document.getElementById("productType").value;
+            var selectedProductQuantity = document.getElementById("productQuantity").value;
+            var selectedProductPriority = document.getElementById("productPriority").value;
+
+            var yearnow = new Date().getFullYear();
+            var mousenow = new Date().getMonth() + 1;
+            var daynow = new Date().getDate();
+            var hournow = new Date().getHours();
+            var minutenow = new Date().getMinutes();
+            var secondnow = new Date().getSeconds();
+            var time_get = `${yearnow}-${mousenow}-${daynow} ${hournow}:${minutenow}:${secondnow}`
+
+            var dataToSend = {
+                productType: selectedProductType,
+                productQuantity: selectedProductQuantity,
+                productPriority: selectedProductPriority,
+                productTime: time_get
+            };
+            socket.send(JSON.stringify(dataToSend));
+            console.log("产品类型:", selectedProductType);
+            console.log("产品数量:", selectedProductQuantity);
+            console.log("生产优先级:", selectedProductPriority);
+        }
+    </script>
+
+</body>
+</html>
+
+

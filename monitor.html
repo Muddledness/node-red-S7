@@ -1,0 +1,109 @@
+<!DOCTYPE html lang="en">
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设备监控</title>
+    <style>
+        .line{
+            display: inline-block;
+            width: 40%;
+            height: 30px;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+        
+        #sidebar {
+            width: 200px;
+            height: 700px;
+            background-color: #333;
+            color: white;
+            padding-top: 20px;
+        }
+        
+        #sidebar h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        #databox {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .nav-link {
+            display: block;
+            padding: 20px;
+            color: white;
+            text-decoration: none;
+            background-color: #333; /* 设置背景色与导航栏一致 */
+        }
+        
+        .nav-link:hover {
+            background-color: #555;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="sidebar">
+        <h2>管理系统</h2>
+        <a class="nav-link" href="order.html">生产计划</a>
+        <a class="nav-link" href="monitor.html">设备监控</a>
+        <a class="nav-link" href="operate.html">设备调试</a>
+        <a class="nav-link" href="ord_management.html">订单管理</a>
+    </div>
+    <div id="databox">
+        <h2 id="dataDisplay">设备监控</h2>
+        <span class="line" id="dataDisplay_1">NaN</span>
+        <span class="line" id="dataDisplay_6">NaN</span>
+        <span class="line" id="dataDisplay_2">NaN</span>
+        <span class="line" id="dataDisplay_7">NaN</span>
+        <span class="line" id="dataDisplay_3">NaN</span>
+        <span class="line" id="dataDisplay_8">NaN Hz</span>
+        <span class="line" id="dataDisplay_4">NaN</span>
+        <span class="line" id="dataDisplay_9">NaN Hz</span>
+        <span class="line" id="dataDisplay_5">NaN</span>
+        <span class="line" id="dataDisplay_10">NaN Hz</span>
+        <span class="line" id="condition_monitoring">Offline Status...</span>
+    </div>
+    <script>
+        var socket = new WebSocket("ws://localhost:1880/ws/monitor");
+        var statusElement = document.getElementById("condition_monitoring");
+
+        socket.onopen = function(event) {
+            console.log("WebSocket connected");
+            statusElement.innerText = "Presence";
+        };
+        socket.onmessage = function(event) {
+            var receivedData = JSON.parse(event.data);
+            var receservo_speed = receivedData[0].servo_speed;
+            var receexc_pos = receivedData[0].exc_pos;
+            var recewait_pos = receivedData[0].wait_pos;
+            var recestep_1 = receivedData[0].step_1;
+            var recestep_2 = receivedData[0].step_2;
+            var recestep_3 = receivedData[0].step_3;
+            var receact_pos = receivedData[0].act_pos;
+            var recefre_con_speed = receivedData[0].fre_con_speed;
+            var recelow_speed = receivedData[0].low_speed;
+            var recehigh_speed = receivedData[0].high_speed;
+            // console.log(receexc_pos);
+            document.getElementById("dataDisplay_1").innerText = "伺服电机速度: " + receservo_speed;
+            document.getElementById("dataDisplay_2").innerText = "托盘交接位置: " + receexc_pos;
+            document.getElementById("dataDisplay_3").innerText = "安全等待位置: " + recewait_pos;
+            document.getElementById("dataDisplay_4").innerText = " 加工位置一 : " + recestep_1;
+            document.getElementById("dataDisplay_5").innerText = " 加工位置二 : " + recestep_2;
+            document.getElementById("dataDisplay_6").innerText = " 加工位置三 : " + recestep_3;
+            document.getElementById("dataDisplay_7").innerText = "托盘当前位置: " + receact_pos;
+            document.getElementById("dataDisplay_8").innerText = "变频器当前值: " + recefre_con_speed + "Hz";
+            document.getElementById("dataDisplay_9").innerText = " 变频器低速 : " + recelow_speed + "Hz";
+            document.getElementById("dataDisplay_10").innerText = " 变频器高速 : " + recehigh_speed + "Hz";
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设备调试</title>
+    <link rel="stylesheet" href="styles_op_admin.css">
+</head>
+<body>
+    <div id="sidebar">
+        <h2>管理系统</h2>
+        <a class="nav-link" href="order.html">生产计划</a>
+        <a class="nav-link" href="monitor.html">设备监控</a>
+        <a class="nav-link" href="operate.html">设备调试</a>
+        <a class="nav-link" href="operate.html">订单管理</a>
+    </div>
+        <div id="content">
+            <h2>设备调试</h2>
+            <div class="line">
+                <span>伺服电机速度</span><input type="text" id="servo_speed">
+                <button onclick="submitInput('servo_speed')">修改</button>
+            </div>
+            <div class="line">
+                <span> 加工位置一 </span><input type="text" id="step_1">
+                <button onclick="submitInput('step_1')">修改</button>
+            </div>
+            <div class="line">
+                <span>安全等待位置</span><input type="text" id="wait_pos">
+                <button onclick="submitInput('wait_pos')">修改</button>
+            </div>
+            <div class="line">
+                <span> 加工位置二 </span><input type="text" id="step_2">
+                <button onclick="submitInput('step_2')">修改</button>
+            </div>
+            <div class="line">
+                <span>托盘交接位置</span><input type="text" id="exc_pos">
+                <button onclick="submitInput('exc_pos')">修改</button>
+            </div>
+            <div class="line">
+                <span> 加工位置三 </span><input type="text" id="step_3">
+                <button onclick="submitInput('step_3')">修改</button>
+            </div>
+            <div class="line">
+                <span>托盘当前位置</span><input type="text" id="act_pos">
+                <button onclick="submitInput('act_pos')">修改</button>
+            </div>
+            <div class="line">
+                <span> 变频器低速 </span><input type="text" id="low_speed">
+                <button onclick="submitInput('low_speed')">修改</button>
+            </div>
+            <div class="line">
+                <span>变频器当前值</span><input type="text" id="fre_con_speed">
+                <button onclick="submitInput('exc_fre_con_speedpos')">修改</button>
+            </div>
+            <div class="line">
+                <span> 变频器高速 </span><input type="text" id="high_speed">
+                <button onclick="submitInput('high_speed')">修改</button>
+            </div>
+    </div>
+    <script src="script_monitor.js"></script>
+</body>
+</html>
