@@ -19,7 +19,7 @@ var socket = new WebSocket("ws://localhost:1880/ws/monitor");
                         receact_pos, recefre_con_speed, recelow_speed, recehigh_speed];
             return dataBase;
         };
-
+        // 获取修改内容并发送数据库
         function submitInput(e){
             var WitchText = document.getElementById(e)
             if(e === 'servo_speed'){
@@ -164,19 +164,3 @@ var socket = new WebSocket("ws://localhost:1880/ws/monitor");
                 socket.send(JSON.stringify(dataToSend));
             }
         }
-
-        // var btn_Q1 = document.getElementById("Q1")
-        // btn_Q1.onmousedown = function(){
-        //     btn_Q1.innerText = "停止";
-        //     var dataToSend = {
-        //         QA : 1
-        //     };
-        //     socket.send(JSON.stringify(dataToSend));
-        // }
-        // btn_Q1.onmouseup = function(){
-        //     btn_Q1.innerText = "启动";
-        //     var dataToSend = {
-        //         QA : 0,
-        //     };
-        //     socket.send(JSON.stringify(dataToSend));
-        // }
