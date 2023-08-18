@@ -1,0 +1,1795 @@
+[
+    {
+        "id": "e59dcc99ba6ee734",
+        "type": "tab",
+        "label": "流程 5",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "a4cb764754d3a5de",
+        "type": "websocket out",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据库上传",
+        "server": "0f257068a9fcd627",
+        "client": "",
+        "x": 790,
+        "y": 660,
+        "wires": []
+    },
+    {
+        "id": "6f909327713c1096",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "排序取置顶发送",
+        "func": "msg.topic = \"SELECT * FROM product ORDER BY priority,id LIMIT 1\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 400,
+        "wires": [
+            [
+                "8c8dee4e4973eb28"
+            ]
+        ]
+    },
+    {
+        "id": "0f8ab38ba969177d",
+        "type": "websocket in",
+        "z": "e59dcc99ba6ee734",
+        "name": "接收删除订单",
+        "server": "0f257068a9fcd627",
+        "client": "",
+        "x": 230,
+        "y": 500,
+        "wires": [
+            [
+                "76737221352abea3"
+            ]
+        ]
+    },
+    {
+        "id": "76737221352abea3",
+        "type": "json",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 370,
+        "y": 500,
+        "wires": [
+            [
+                "7b8e9287793359c3"
+            ]
+        ]
+    },
+    {
+        "id": "c829b91f14a64a21",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Parameter",
+        "x": 610,
+        "y": 620,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b349513e585fba08",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "function 5",
+        "func": "msg.payload = [msg.payload.conv_set_v, msg.payload.conv_act_v, msg.payload.tran_set_v, msg.payload.tran_act_v, msg.payload.tran_set_pos, msg.payload.tran_act_pos];\nmsg.topic = \"UPDATE parameter SET conv_set_v = ?, conv_act_v = ?, tran_set_v = ?, tran_act_v = ?, tran_set_pos = ?, tran_act_pos = ? WHERE par_id = 1;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 620,
+        "wires": [
+            [
+                "c829b91f14a64a21"
+            ]
+        ]
+    },
+    {
+        "id": "c55342fb5b913b36",
+        "type": "inject",
+        "z": "e59dcc99ba6ee734",
+        "name": "设备状态更新",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "{\"conv_set_v\":20,\"conv_act_v\":16,\"tran_set_v\":25,\"tran_act_v\":20,\"tran_set_pos\":30,\"tran_act_pos\":28}",
+        "payloadType": "json",
+        "x": 250,
+        "y": 620,
+        "wires": [
+            [
+                "b349513e585fba08"
+            ]
+        ]
+    },
+    {
+        "id": "346697377d48a9d2",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Product",
+        "x": 600,
+        "y": 660,
+        "wires": [
+            [
+                "a4cb764754d3a5de"
+            ]
+        ]
+    },
+    {
+        "id": "e29bc018274eb128",
+        "type": "inject",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 240,
+        "y": 660,
+        "wires": [
+            [
+                "9bfb40ed26c94bda"
+            ]
+        ]
+    },
+    {
+        "id": "9bfb40ed26c94bda",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "当前订单显示",
+        "func": "msg.topic = \"select * from product\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 660,
+        "wires": [
+            [
+                "346697377d48a9d2"
+            ]
+        ]
+    },
+    {
+        "id": "4a2b2fbad6f59ade",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Product",
+        "x": 780,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7b8e9287793359c3",
+        "type": "switch",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "property": "payload.action",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "delete",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "delete_to_his",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 510,
+        "y": 500,
+        "wires": [
+            [
+                "ef1b7e3c5298f5b7"
+            ],
+            [
+                "a8d47e0abab2fd22"
+            ]
+        ]
+    },
+    {
+        "id": "ef1b7e3c5298f5b7",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "DELETE",
+        "func": "msg.topic = `DELETE FROM product WHERE id = ${msg.payload.id}`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 480,
+        "wires": [
+            [
+                "4a2b2fbad6f59ade"
+            ]
+        ]
+    },
+    {
+        "id": "5464f55320ee9fe0",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "插入下单数据",
+        "func": "msg.payload = [msg.payload.productType, msg.payload.productQuantity, msg.payload.productPriority, msg.payload.productTime];\nmsg.topic = `INSERT INTO product VALUES(null, ?, ?, ?, ?, \"待加工\")`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 500,
+        "y": 580,
+        "wires": [
+            [
+                "931b62b4be9545d5"
+            ]
+        ]
+    },
+    {
+        "id": "931b62b4be9545d5",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Product",
+        "x": 660,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8e191bc61797c3e4",
+        "type": "websocket in",
+        "z": "e59dcc99ba6ee734",
+        "name": "接收下订单",
+        "server": "a4eebc7626c87509",
+        "client": "",
+        "x": 220,
+        "y": 580,
+        "wires": [
+            [
+                "cb614b150394bcca"
+            ]
+        ]
+    },
+    {
+        "id": "cb614b150394bcca",
+        "type": "json",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 350,
+        "y": 580,
+        "wires": [
+            [
+                "5464f55320ee9fe0"
+            ]
+        ]
+    },
+    {
+        "id": "5cacbeb5425f0909",
+        "type": "websocket in",
+        "z": "e59dcc99ba6ee734",
+        "name": "设备信息接收monitor",
+        "server": "3b6cba6eaf082878",
+        "client": "",
+        "x": 280,
+        "y": 1040,
+        "wires": [
+            [
+                "c05807d97be940f0"
+            ]
+        ]
+    },
+    {
+        "id": "63c47eea653ce631",
+        "type": "websocket out",
+        "z": "e59dcc99ba6ee734",
+        "name": "设备信息上传",
+        "server": "3b6cba6eaf082878",
+        "client": "",
+        "x": 760,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "d22a6f3d31a98210",
+        "type": "websocket in",
+        "z": "e59dcc99ba6ee734",
+        "name": "接收删除订单",
+        "server": "1848d10491d79aaf",
+        "client": "",
+        "x": 230,
+        "y": 740,
+        "wires": [
+            [
+                "45b5d357a80df025"
+            ]
+        ]
+    },
+    {
+        "id": "e4657012faa0168b",
+        "type": "comment",
+        "z": "e59dcc99ba6ee734",
+        "name": "开放request端口给ord_management",
+        "info": "开放request端口给ord_management",
+        "x": 300,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "38f0490a765df457",
+        "type": "comment",
+        "z": "e59dcc99ba6ee734",
+        "name": "开放order端口给order",
+        "info": "",
+        "x": 260,
+        "y": 540,
+        "wires": []
+    },
+    {
+        "id": "9fc1a276f1baa9be",
+        "type": "comment",
+        "z": "e59dcc99ba6ee734",
+        "name": "将设备信息上传monitor端口",
+        "info": "",
+        "x": 820,
+        "y": 240,
+        "wires": []
+    },
+    {
+        "id": "0d63d97b83edfd07",
+        "type": "comment",
+        "z": "e59dcc99ba6ee734",
+        "name": "上传数据库数据进入request端口",
+        "info": "便于进行删除操作",
+        "x": 850,
+        "y": 620,
+        "wires": []
+    },
+    {
+        "id": "23f5023f5f42b46b",
+        "type": "s7 in",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "mode": "single",
+        "variable": "Finish",
+        "diff": true,
+        "name": "接收订单完成信号",
+        "x": 250,
+        "y": 420,
+        "wires": [
+            [
+                "4f329541e82ade0c"
+            ]
+        ]
+    },
+    {
+        "id": "8c8dee4e4973eb28",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Product",
+        "x": 780,
+        "y": 400,
+        "wires": [
+            [
+                "c1220d3a4cda47e4",
+                "1b3694467b65ba97",
+                "0f61a0a34ca8751d",
+                "9289f554661405c2",
+                "ba49f31585a298bb",
+                "a89bf1584da65e8c"
+            ]
+        ]
+    },
+    {
+        "id": "d26540951a455a22",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "Priority",
+        "name": "写入优先级",
+        "x": 1150,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c1220d3a4cda47e4",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据封装",
+        "func": "msg.payload = msg.payload[0].id\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 180,
+        "wires": [
+            [
+                "945646a3c8b4ee0d"
+            ]
+        ]
+    },
+    {
+        "id": "81abf60acb5e9179",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "Pro_Type",
+        "name": "写入订单类型",
+        "x": 1160,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "a67395668f95bfe0",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "Pro_Num",
+        "name": "写入订单数量",
+        "x": 1160,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "2a823109257ace0b",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "Sent",
+        "name": "SendFlag",
+        "x": 1140,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "945646a3c8b4ee0d",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "Pro_ID",
+        "name": "写入订单编号",
+        "x": 1160,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "1b3694467b65ba97",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据封装",
+        "func": "msg.payload = msg.payload[0].priority;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 220,
+        "wires": [
+            [
+                "d26540951a455a22"
+            ]
+        ]
+    },
+    {
+        "id": "0f61a0a34ca8751d",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据封装",
+        "func": "msg.payload = msg.payload[0].pro_type;\nif (msg.payload === \"W101\") {\n    msg.payload = 1;\n} else if (msg.payload === \"W102\") {\n    msg.payload = 2;\n} else if (msg.payload === \"W103\") {\n    msg.payload = 3;\n} else {\n    msg.payload = 4;\n}\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 260,
+        "wires": [
+            [
+                "81abf60acb5e9179"
+            ]
+        ]
+    },
+    {
+        "id": "9289f554661405c2",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据封装",
+        "func": "msg.payload = msg.payload[0].pro_num\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 300,
+        "wires": [
+            [
+                "a67395668f95bfe0"
+            ]
+        ]
+    },
+    {
+        "id": "ba49f31585a298bb",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据封装",
+        "func": "msg.payload = 1;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 340,
+        "wires": [
+            [
+                "2a823109257ace0b"
+            ]
+        ]
+    },
+    {
+        "id": "4f329541e82ade0c",
+        "type": "switch",
+        "z": "e59dcc99ba6ee734",
+        "name": "完成判断",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 420,
+        "y": 420,
+        "wires": [
+            [
+                "6f909327713c1096"
+            ],
+            [
+                "f5344f6a43b66f4d"
+            ]
+        ]
+    },
+    {
+        "id": "189575e17ddc4eb7",
+        "type": "websocket out",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据库上传",
+        "server": "1848d10491d79aaf",
+        "client": "",
+        "x": 790,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "c87375c413c49754",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "HistoryProduct",
+        "x": 620,
+        "y": 360,
+        "wires": [
+            [
+                "189575e17ddc4eb7"
+            ]
+        ]
+    },
+    {
+        "id": "f9ff4fcc99bf018c",
+        "type": "inject",
+        "z": "e59dcc99ba6ee734",
+        "name": "历史循环",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 250,
+        "y": 360,
+        "wires": [
+            [
+                "70e8b30f3591525e"
+            ]
+        ]
+    },
+    {
+        "id": "70e8b30f3591525e",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "历史订单显示",
+        "func": "msg.topic = \"select * from historyproduct;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 440,
+        "y": 360,
+        "wires": [
+            [
+                "c87375c413c49754"
+            ]
+        ]
+    },
+    {
+        "id": "5c94eff898d28c29",
+        "type": "comment",
+        "z": "e59dcc99ba6ee734",
+        "name": "上传数据库数据进入his_order端口",
+        "info": "便于进行删除操作",
+        "x": 720,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "dedb462281bdf58e",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "订单状态更新",
+        "func": "msg.topic = `UPDATE product SET status = '已完成' WHERE id = ${msg.payload[0].id};`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 440,
+        "wires": [
+            [
+                "fe2c61796352888a"
+            ]
+        ]
+    },
+    {
+        "id": "fe2c61796352888a",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "datebase",
+        "x": 1160,
+        "y": 420,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f5344f6a43b66f4d",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "发送置顶状态",
+        "func": "msg.topic = \"SELECT * FROM product WHERE status = '加工中'\";\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 600,
+        "y": 440,
+        "wires": [
+            [
+                "051e11ab7d485cee"
+            ]
+        ]
+    },
+    {
+        "id": "a89bf1584da65e8c",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "置顶状态更新",
+        "func": "msg.topic = `UPDATE product SET status = '加工中' WHERE id = ${msg.payload[0].id};`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 400,
+        "wires": [
+            [
+                "fe2c61796352888a"
+            ]
+        ]
+    },
+    {
+        "id": "ee04a86662d8503a",
+        "type": "comment",
+        "z": "e59dcc99ba6ee734",
+        "name": "更新主数据库",
+        "info": "",
+        "x": 1170,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "051e11ab7d485cee",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Product",
+        "x": 780,
+        "y": 440,
+        "wires": [
+            [
+                "dedb462281bdf58e"
+            ]
+        ]
+    },
+    {
+        "id": "7393644b26e05f01",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Product",
+        "x": 780,
+        "y": 540,
+        "wires": [
+            [
+                "265c70bd9e92df6f"
+            ]
+        ]
+    },
+    {
+        "id": "a8d47e0abab2fd22",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "SELECT",
+        "func": "msg.topic = `SELECT * FROM product WHERE id = ${msg.payload.id}`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 640,
+        "y": 540,
+        "wires": [
+            [
+                "7393644b26e05f01"
+            ]
+        ]
+    },
+    {
+        "id": "265c70bd9e92df6f",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "ToHistory",
+        "func": "msg.payload = [msg.payload[0].id, msg.payload[0].pro_type, msg.payload[0].pro_num, msg.payload[0].ord_time];\nmsg.topic = \"INSERT INTO historyproduct(his_id, his_pro_type, his_pro_num, his_ord_time) VALUES (?, ?, ?, ?);\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 920,
+        "y": 560,
+        "wires": [
+            [
+                "0fb43b7c63743f32",
+                "5e281dabb841832c"
+            ]
+        ]
+    },
+    {
+        "id": "0fb43b7c63743f32",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "HistoryProduct",
+        "x": 1140,
+        "y": 560,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "53f359f2510d0946",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Product",
+        "x": 1120,
+        "y": 500,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5e281dabb841832c",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "DELETE",
+        "func": "msg.topic = `DELETE FROM product WHERE id = ${msg.payload[0]}`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 960,
+        "y": 500,
+        "wires": [
+            [
+                "53f359f2510d0946"
+            ]
+        ]
+    },
+    {
+        "id": "93d07c260ec8c09f",
+        "type": "comment",
+        "z": "e59dcc99ba6ee734",
+        "name": "开放his_order端口给history",
+        "info": "",
+        "x": 270,
+        "y": 700,
+        "wires": []
+    },
+    {
+        "id": "45b5d357a80df025",
+        "type": "json",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 390,
+        "y": 740,
+        "wires": [
+            [
+                "32877571c9d06977"
+            ]
+        ]
+    },
+    {
+        "id": "f369a582e8cc334b",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "HistoryProduct",
+        "x": 860,
+        "y": 740,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "9c46f8669e576e4d",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "DELETE",
+        "func": "msg.topic = `DELETE FROM historyproduct WHERE his_id = ${msg.payload.id}`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 740,
+        "wires": [
+            [
+                "f369a582e8cc334b"
+            ]
+        ]
+    },
+    {
+        "id": "32877571c9d06977",
+        "type": "switch",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "property": "payload.action",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "delete",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 1,
+        "x": 530,
+        "y": 740,
+        "wires": [
+            [
+                "9c46f8669e576e4d"
+            ]
+        ]
+    },
+    {
+        "id": "769cbe6331fd93fd",
+        "type": "comment",
+        "z": "e59dcc99ba6ee734",
+        "name": "deletef_his方法更新数据库",
+        "info": "",
+        "x": 1170,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "8e99ab375f7e697a",
+        "type": "s7 in",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "mode": "all",
+        "variable": "",
+        "diff": true,
+        "name": "数据全家桶",
+        "x": 200,
+        "y": 240,
+        "wires": [
+            [
+                "eafd6d0735ee7c58"
+            ]
+        ]
+    },
+    {
+        "id": "eafd6d0735ee7c58",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据半家桶",
+        "func": "msg.payload = [msg.payload.servo_speed, msg.payload.exc_pos, msg.payload.wait_pos, msg.payload.step_1, msg.payload.step_2, msg.payload.step_3, msg.payload.act_pos, msg.payload.fre_con_speed, msg.payload.low_speed, msg.payload.high_speed];\nmsg.topic = \"UPDATE monitor SET servo_speed = ?, exc_pos = ?, wait_pos = ?, step_1 = ?, step_2 = ?, step_3 = ?, act_pos = ?, fre_con_speed = ?, low_speed = ?, high_speed = ? WHERE index_id = 1;\"\n// msg.topic = `UPDATE monitor SET servo_speed=${msg.payload.servo_speed},exc_pos=${msg.payload.exc_pos}, wait_pos=${msg.payload.wait_pos},step_1=${msg.payload.step_1},step_2=${msg.payload.step_2},step_3=${msg.payload.step_3},act_pos =${msg.payload.act_pos},fre_con_speed=${msg.payload.fre_con_speed},low_speed=${msg.payload.low_speed},high_speed=${msg.payload.high_speed} WHERE ${msg.payload.index_id}=1;`\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 240,
+        "wires": [
+            [
+                "6fb8ba19eac7892d"
+            ]
+        ]
+    },
+    {
+        "id": "6fb8ba19eac7892d",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Monitor",
+        "x": 620,
+        "y": 240,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "316f5cf037bc1b65",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Monitor",
+        "x": 580,
+        "y": 280,
+        "wires": [
+            [
+                "63c47eea653ce631"
+            ]
+        ]
+    },
+    {
+        "id": "8405b2948f94c8f7",
+        "type": "inject",
+        "z": "e59dcc99ba6ee734",
+        "name": "设备数据上传",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 260,
+        "y": 280,
+        "wires": [
+            [
+                "d8d34a0ab917ec70"
+            ]
+        ]
+    },
+    {
+        "id": "d8d34a0ab917ec70",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "数据显示",
+        "func": "msg.topic = \"SELECT * FROM monitor WHERE index_id = 1;;\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 280,
+        "wires": [
+            [
+                "316f5cf037bc1b65"
+            ]
+        ]
+    },
+    {
+        "id": "c05807d97be940f0",
+        "type": "json",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 450,
+        "y": 1040,
+        "wires": [
+            [
+                "345d47c2e3cfcd8a",
+                "06729d79647e16d7",
+                "cf51f71910888a4b",
+                "cf249680bade0223",
+                "ab53f2bb785eb508",
+                "ce8103d3c316f26d",
+                "2ceb53d7b118f5e4",
+                "c2bc2fdb69d4717a",
+                "6e83d174d2a2254f",
+                "231dab6ace376ec0"
+            ]
+        ]
+    },
+    {
+        "id": "98c77a06a6073725",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "servo_speed",
+        "name": "servo_speed",
+        "x": 950,
+        "y": 1140,
+        "wires": []
+    },
+    {
+        "id": "1093eceffa255f66",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "exc_pos",
+        "name": "exc_pos",
+        "x": 940,
+        "y": 1220,
+        "wires": []
+    },
+    {
+        "id": "b20dca1738f07753",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "wait_pos",
+        "name": "wait_pos",
+        "x": 980,
+        "y": 940,
+        "wires": []
+    },
+    {
+        "id": "d9086087855155f3",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "step_1",
+        "name": "step_1",
+        "x": 930,
+        "y": 860,
+        "wires": []
+    },
+    {
+        "id": "46ed3a57748b1b3b",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "step_2",
+        "name": "step_2",
+        "x": 970,
+        "y": 900,
+        "wires": []
+    },
+    {
+        "id": "299751436d2573b3",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "step_3",
+        "name": "step_3",
+        "x": 930,
+        "y": 1180,
+        "wires": []
+    },
+    {
+        "id": "ab3c5a18d90c68f7",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "act_pos",
+        "name": "act_pos",
+        "x": 940,
+        "y": 980,
+        "wires": []
+    },
+    {
+        "id": "8196a8410e068f50",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "fre_con_speed",
+        "name": "fre_con_speed",
+        "x": 1000,
+        "y": 1020,
+        "wires": []
+    },
+    {
+        "id": "70b55aab9af1f451",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "low_speed",
+        "name": "low_speed",
+        "x": 950,
+        "y": 1100,
+        "wires": []
+    },
+    {
+        "id": "db8521dca3c445d6",
+        "type": "s7 out",
+        "z": "e59dcc99ba6ee734",
+        "endpoint": "9e830921d2dcba24",
+        "variable": "high_speed",
+        "name": "high_speed",
+        "x": 950,
+        "y": 1060,
+        "wires": []
+    },
+    {
+        "id": "2ceb53d7b118f5e4",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "servo_speed",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.servo_speed);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 1140,
+        "wires": [
+            [
+                "98c77a06a6073725"
+            ]
+        ]
+    },
+    {
+        "id": "345d47c2e3cfcd8a",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "step_1",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.step_1);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 860,
+        "wires": [
+            [
+                "d9086087855155f3"
+            ]
+        ]
+    },
+    {
+        "id": "6e83d174d2a2254f",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "step_2",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.step_2);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 900,
+        "wires": [
+            [
+                "46ed3a57748b1b3b"
+            ]
+        ]
+    },
+    {
+        "id": "c2bc2fdb69d4717a",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "step_3",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.step_3);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 650,
+        "y": 1180,
+        "wires": [
+            [
+                "299751436d2573b3"
+            ]
+        ]
+    },
+    {
+        "id": "ab53f2bb785eb508",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "exc_pos",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.exc_pos);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 1220,
+        "wires": [
+            [
+                "1093eceffa255f66"
+            ]
+        ]
+    },
+    {
+        "id": "231dab6ace376ec0",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "wait_pos",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.wait_pos);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 940,
+        "wires": [
+            [
+                "b20dca1738f07753"
+            ]
+        ]
+    },
+    {
+        "id": "06729d79647e16d7",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "act_pos",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.act_pos);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 980,
+        "wires": [
+            [
+                "ab3c5a18d90c68f7"
+            ]
+        ]
+    },
+    {
+        "id": "cf51f71910888a4b",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "fre_con_speed",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.fre_con_speed);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 1020,
+        "wires": [
+            [
+                "8196a8410e068f50"
+            ]
+        ]
+    },
+    {
+        "id": "ce8103d3c316f26d",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "low_speed",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.low_speed);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 1100,
+        "wires": [
+            [
+                "70b55aab9af1f451"
+            ]
+        ]
+    },
+    {
+        "id": "cf249680bade0223",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "high_speed",
+        "func": "var temp = msg;\nmsg.payload = Number(temp.payload.high_speed);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 1060,
+        "wires": [
+            [
+                "db8521dca3c445d6"
+            ]
+        ]
+    },
+    {
+        "id": "a04c82a8adefee73",
+        "type": "ui_gauge",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "group": "248c386564f7dded",
+        "order": 1,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "单机转速",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "60",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1160,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "2291d43de98d0f2e",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "servo_speed",
+        "func": "msg.payload = msg.payload[0].servo_speed;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 100,
+        "wires": [
+            [
+                "a04c82a8adefee73"
+            ]
+        ]
+    },
+    {
+        "id": "dc32145ac084787d",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "high_speed",
+        "func": "msg.payload = msg.payload[0].high_speed;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 990,
+        "y": 140,
+        "wires": [
+            [
+                "88b04f69a7e579bf"
+            ]
+        ]
+    },
+    {
+        "id": "88b04f69a7e579bf",
+        "type": "ui_gauge",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "group": "248c386564f7dded",
+        "order": 1,
+        "width": "3",
+        "height": "3",
+        "gtype": "gage",
+        "title": "highspeed",
+        "label": "units",
+        "format": "{{value}}",
+        "min": 0,
+        "max": "60",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1170,
+        "y": 140,
+        "wires": []
+    },
+    {
+        "id": "0146c447d2ee293e",
+        "type": "websocket in",
+        "z": "e59dcc99ba6ee734",
+        "name": "监听Sigh Up",
+        "server": "c40b46980be81e4b",
+        "client": "",
+        "x": 230,
+        "y": 820,
+        "wires": [
+            [
+                "f95503f51a4251ed"
+            ]
+        ]
+    },
+    {
+        "id": "656efa85dd17533c",
+        "type": "websocket out",
+        "z": "e59dcc99ba6ee734",
+        "name": "更新账户名",
+        "server": "c40b46980be81e4b",
+        "client": "",
+        "x": 770,
+        "y": 780,
+        "wires": []
+    },
+    {
+        "id": "9b758dbeeaaa933e",
+        "type": "inject",
+        "z": "e59dcc99ba6ee734",
+        "name": "账户管理",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 250,
+        "y": 780,
+        "wires": [
+            [
+                "a8b8a8d73d26a236"
+            ]
+        ]
+    },
+    {
+        "id": "a8b8a8d73d26a236",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "账户管理",
+        "func": "msg.topic = \"select * from account\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 420,
+        "y": 780,
+        "wires": [
+            [
+                "6bddc7d1a5892513"
+            ]
+        ]
+    },
+    {
+        "id": "6bddc7d1a5892513",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Account",
+        "x": 580,
+        "y": 780,
+        "wires": [
+            [
+                "656efa85dd17533c"
+            ]
+        ]
+    },
+    {
+        "id": "7e916def4c4e145f",
+        "type": "function",
+        "z": "e59dcc99ba6ee734",
+        "name": "插入账户",
+        "func": "msg.payload = [msg.payload.username, msg.payload.password]\nmsg.topic = \"INSERT INTO account VALUES (?, ?)\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 540,
+        "y": 820,
+        "wires": [
+            [
+                "e9af81bc6b817137"
+            ]
+        ]
+    },
+    {
+        "id": "e9af81bc6b817137",
+        "type": "mysql",
+        "z": "e59dcc99ba6ee734",
+        "mydb": "8f98a174cdc592ab",
+        "name": "Account",
+        "x": 720,
+        "y": 820,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f95503f51a4251ed",
+        "type": "json",
+        "z": "e59dcc99ba6ee734",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 390,
+        "y": 820,
+        "wires": [
+            [
+                "7e916def4c4e145f"
+            ]
+        ]
+    },
+    {
+        "id": "0f257068a9fcd627",
+        "type": "websocket-listener",
+        "path": "/ws/request",
+        "wholemsg": "false"
+    },
+    {
+        "id": "8f98a174cdc592ab",
+        "type": "MySQLdatabase",
+        "name": "parameter",
+        "host": "127.0.0.1",
+        "port": "3306",
+        "db": "nodered",
+        "tz": "",
+        "charset": "UTF8"
+    },
+    {
+        "id": "a4eebc7626c87509",
+        "type": "websocket-listener",
+        "path": "/ws/order",
+        "wholemsg": "false"
+    },
+    {
+        "id": "3b6cba6eaf082878",
+        "type": "websocket-listener",
+        "path": "/ws/monitor",
+        "wholemsg": "false"
+    },
+    {
+        "id": "1848d10491d79aaf",
+        "type": "websocket-listener",
+        "path": "/ws/his_order",
+        "wholemsg": "false"
+    },
+    {
+        "id": "9e830921d2dcba24",
+        "type": "s7 endpoint",
+        "transport": "iso-on-tcp",
+        "address": "192.168.0.1",
+        "port": "102",
+        "rack": "0",
+        "slot": "1",
+        "localtsaphi": "01",
+        "localtsaplo": "00",
+        "remotetsaphi": "01",
+        "remotetsaplo": "00",
+        "connmode": "rack-slot",
+        "adapter": "",
+        "busaddr": "2",
+        "cycletime": "1000",
+        "timeout": "2000",
+        "name": "",
+        "vartable": [
+            {
+                "addr": "DB7,INT0",
+                "name": "Pro_ID"
+            },
+            {
+                "addr": "DB7,INT2",
+                "name": "Priority"
+            },
+            {
+                "addr": "DB7,INT4",
+                "name": "Pro_Type"
+            },
+            {
+                "addr": "DB7,INT6",
+                "name": "Pro_Num"
+            },
+            {
+                "addr": "DB7,INT8",
+                "name": "Sent"
+            },
+            {
+                "addr": "DB7,INT10",
+                "name": "Finish"
+            },
+            {
+                "addr": "Q20.0",
+                "name": "Q20_0"
+            },
+            {
+                "addr": "DB3,INT10",
+                "name": "servo_speed"
+            },
+            {
+                "addr": "DB3,INT12",
+                "name": "exc_pos"
+            },
+            {
+                "addr": "DB3,INT14",
+                "name": "wait_pos"
+            },
+            {
+                "addr": "DB3,INT16",
+                "name": "step_1"
+            },
+            {
+                "addr": "DB3,INT18",
+                "name": "step_2"
+            },
+            {
+                "addr": "DB3,INT20",
+                "name": "step_3"
+            },
+            {
+                "addr": "DB3,INT22",
+                "name": "act_pos"
+            },
+            {
+                "addr": "DB3,INT2",
+                "name": "fre_con_speed"
+            },
+            {
+                "addr": "DB3,INT4",
+                "name": "low_speed"
+            },
+            {
+                "addr": "DB3,INT6",
+                "name": "high_speed"
+            }
+        ]
+    },
+    {
+        "id": "248c386564f7dded",
+        "type": "ui_group",
+        "name": "Demo",
+        "tab": "6f3f1c9fff92fe35",
+        "order": 1,
+        "disp": true,
+        "width": "6",
+        "collapse": true,
+        "className": ""
+    },
+    {
+        "id": "c40b46980be81e4b",
+        "type": "websocket-listener",
+        "path": "/ws/login",
+        "wholemsg": "false"
+    },
+    {
+        "id": "6f3f1c9fff92fe35",
+        "type": "ui_tab",
+        "name": "Demo",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
